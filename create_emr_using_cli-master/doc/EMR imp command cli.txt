@@ -1,0 +1,92 @@
+create Iam user and also create  Access Key ID and access key
+
+
+type aws configure
+enter AWS Access Key ID and access key
+and region : us-east-1
+
+
+
+>>aws configure
+
+
+once aws configured in cmd . try to execute command using aws cli
+List all IAM user 
+>>aws iam list-users
+
+List all buckets in s3
+>>aws s3 ls
+
+
+
+
+Two files will be automatically created in the hidden folder .aws at root directory
+>>cd .aws
+
+
+>>cd .aws
+
+
+in window machine,list folders and files in cmd
+
+>>tree /f
+
+in unix server use ls command
+
+>>ls
+
+Display the contents of a single file:
+>>type filename.txt
+
+In unix server
+>>cat filename.txt
+
+
+AWS Management Console or by using the describe-subnets command in AWS CLI.
+
+>>aws ec2 describe-subnets
+
+
+Create cluster
+
+
+>>aws emr create-cluster --name MyEMRCluster --use-default-roles --release-label emr-6.11.0 --instance-count 3 --instance-type m5.xlarge --applications Name=Spark Name=Hadoop --ec2-attributes SubnetIds=subnet-03xxxx64,KeyName=monu --log-uri s3://myemrproject/logs/
+
+
+check id of cluster
+
+>>aws emr list-clusters
+
+
+Using the ClusterId to check status and information of the cluster
+
+>>aws emr describe-cluster --cluster-id j-GAVB3ZN07CUB
+
+We should wait for a few minutes for the cluster to be available (Status changes to ‘available’) 
+
+
+excute job by add step pass cluster id and script name (spark code)
+
+>>aws emr add-steps --cluster-id j-GAVB3ZN07CUB --steps Type=Spark,Name="MySparkJob",ActionOnFailure=CONTINUE,Args=[--deploy-mode,cluster,--master,yarn,--conf,spark.yarn.submit.waitAppCompletion=true,s3://myemrproject/scripts/mypysparkscript_1.py]
+
+
+spark-submit in primary node cluster
+
+spark-submit is a command-line tool provided by Apache Spark to submit Spark applications or jobs directly to a Spark cluster.
+
+
+In primary node,create python script using vi mypysparkscript_1.py
+
+python_script->mypysparkscript_1.py
+
+
+>>spark-submit --master yarn ./mypysparkscript_1.py
+
+
+if you use spark-submit, you have more fine-grained control over the Spark job and need to manage 
+the resources and environment yourself. 
+ 
+ 
+
+make sure terminate cluster by using below command
+$aws emr terminate-clusters --cluster-id j-18B7B817T75CO
